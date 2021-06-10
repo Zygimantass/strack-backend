@@ -1,0 +1,19 @@
+version: "3"
+services:
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: password
+            MONGO_INITDB_DATABASE: strack
+        volumes:
+            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    backend:
+        build: ./
+        restart: always
+        environment:
+            MONGODB_URL: mongodb://user:password@mongo:27017/strack
+            FIRBASE_URL: https://quickstart-1565422418922.firebaseio.com
+        ports:
+            - 8000:8000
