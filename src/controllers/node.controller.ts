@@ -2,6 +2,36 @@ import {Node} from '../models/node.model';
 import {Request, Response} from 'express';
 import {validationResult} from 'express-validator';
 import {ErrorMessage} from '../messages/errors.message';
+import {publisher, subscriber} from '../helpers/redis.helper';
+import * as gcpHelper from '../helpers/google.helper';
+import {getAwsZones} from '../helpers/aws.helper'; 
+import {getAzureZones} from '../helpers/azure.helper';
+
+const getLocation = async (req: Request, res: Response) => {
+    const provider: number = parseInt(req.params.provider);
+    switch(provider) {
+        case 0:
+            return res.json({
+                success: true,
+                data: await getAwsZones()
+            });
+        case 1:
+            return res.json({
+                success: true,
+                data: await gcpHelper.getGoogleCloudZones()
+            });
+        case 2:
+            return res.json({
+                success: true,
+                data: await getAzureZones()
+            });
+        default:
+            return res.json({
+                success: false
+            });
+
+    }
+}
 
 /* Gets information about the node, then id is specified */
 const getNode = async (req: Request, res: Response) => {
@@ -130,4 +160,4 @@ const removeNode = async (req: Request, res: Response) => {
     });
 }
 
-export {getNode, getNodes, createNode, removeNode};
+export {getNode, getNodes, createNode, removeNode, getLocation};

@@ -2,8 +2,10 @@ import {Schema, model} from 'mongoose';
 
 /* Node types:
 0 - Bitcoin
-1 - Elrond */
-const NodeType = [0, 1]; 
+1 - Elrond 
+2 - Ethereum
+*/
+const NodeType = [0, 1, 2]; 
 
 /* Node status:
 0 - alive

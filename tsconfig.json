@@ -7,8 +7,12 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strict": true,
+    "allowJs": true
   },
   "exclude": [
-    "./tests"
+    "./tests",
+    "./build",
+    "./mongo-init.js",
+    "jest.config.js"
   ]
 }
