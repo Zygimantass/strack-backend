@@ -14,10 +14,10 @@ const generateIDValidator = (location: Location, title: string) : ParamSchema =>
     }
 };
 
-const generateNameValidator = (location: Location) : ParamSchema => {
+const generateNameValidator = (location: Location, title: string) : ParamSchema => {
     return {
         in: [location],
-        errorMessage: 'Name is wrong',
+        errorMessage: `${title} is wrong`,
         isString: true,
         trim: true,
         notEmpty: true

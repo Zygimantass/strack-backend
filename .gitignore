@@ -3,3 +3,4 @@ build
 run.sh
 src/firebase.json
 google-cloud.json
+docker-compose.yml

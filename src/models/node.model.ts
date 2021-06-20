@@ -18,8 +18,9 @@ const NodeStatus = [0, 1, 2, 3];
 /* Datacenter:
 0 - AWS
 1 - GCP
+2 - Azure
 */
-const Datacenter = [0, 1];
+const Datacenter = [0, 1, 2];
 
 
 // Schema for node
@@ -44,4 +45,4 @@ const schema = new Schema({
 // Creates model for category
 const Node = model('Node', schema);
 
-export { Node };
+export { Node, NodeType, NodeStatus, Datacenter};

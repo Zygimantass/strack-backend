@@ -8,6 +8,15 @@ import {getAwsZones} from '../helpers/aws.helper';
 import {getAzureZones} from '../helpers/azure.helper';
 
 const getLocation = async (req: Request, res: Response) => {
+    /* Check if no validation errors occured */
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            message: err.mapped()
+
+        });
+    }
     const provider: number = parseInt(req.params.provider);
     switch(provider) {
         case 0:
