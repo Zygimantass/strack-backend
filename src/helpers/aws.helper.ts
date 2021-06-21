@@ -12,7 +12,7 @@ const getAwsZones = async () => {
     }
     let data = <DescribeRegionsResult>await ec2client.describeRegions().promise();
     let parsedData = data.Regions?.map(region => region.RegionName);
-    cacheSet('cache:locations:aws', JSON.stringify(parsedData), 'EX', 60 * 30);
+    cacheSet('cache:locations:aws', JSON.stringify(parsedData), 'EX', 60 * 60 * 48);
     return parsedData;
 }   
 

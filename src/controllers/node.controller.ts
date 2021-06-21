@@ -6,6 +6,7 @@ import {publisher, subscriber} from '../helpers/redis.helper';
 import * as gcpHelper from '../helpers/google.helper';
 import {getAwsZones} from '../helpers/aws.helper'; 
 import {getAzureZones} from '../helpers/azure.helper';
+import crypto from 'crypto';
 
 const getLocation = async (req: Request, res: Response) => {
     /* Check if no validation errors occured */
@@ -93,13 +94,19 @@ const createNode = async (req: Request, res: Response) => {
     const type: number = req.body.type;
     const location: string = req.body.location;
     const owner_id: string = res.locals.user.user_id;
+    const nodeStatus = 3;
+    const username = crypto.randomBytes(5).toString('hex');
+    const password = crypto.randomBytes(10).toString('hex');
 
     const newNode = new Node({
         name,
         datacenter,
         type,
         location,
-        owner_id
+        status: nodeStatus,
+        owner_id,
+        graphana_username: username,
+        graphana_password: password
     });
     const status = await newNode.save().catch((e: any) => false);
     if (!status) {
@@ -108,6 +115,15 @@ const createNode = async (req: Request, res: Response) => {
             message: ErrorMessage.ERROR_DURING_DATABASE_OPERATION
         });
     }
+    publisher.publish("node:create", JSON.stringify({
+        name: name,
+        datacenter: datacenter,
+        type: type,
+        location: location,
+        graphana_username: username,
+        graphana_password: password,
+        node_id: newNode._id
+    }));
     return res.status(201).json({
         success: true,
         id: newNode._id
@@ -168,5 +184,25 @@ const removeNode = async (req: Request, res: Response) => {
         success: true
     });
 }
+
+subscriber.on('message', async (channel, message) => {
+    const parsedMessage = JSON.parse(message);
+    if (parsedMessage.node_id) {
+        return;
+    }
+    let node = await Node.findById(parsedMessage.node_id);
+    if (parsedMessage.status) {
+        node.status = 0;
+    } else {
+        node.status = 2;
+    }
+    node.agent_name = parsedMessage.agent_name;
+    node.agent_password = parsedMessage.agent_password;
+    await node.save();
+});
+
+subscriber.subscribe('node:create:status');
+
+
 
 export {getNode, getNodes, createNode, removeNode, getLocation};

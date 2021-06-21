@@ -20,7 +20,7 @@ const getAzureZones = async () => {
         }
     });
     parsedData = parsedData.filter(item => item);
-    cacheSet('cache:locations:azure', JSON.stringify(parsedData), 'EX', 60 * 30);
+    cacheSet('cache:locations:azure', JSON.stringify(parsedData), 'EX', 60 * 60 * 48);
     return parsedData;
 }
 

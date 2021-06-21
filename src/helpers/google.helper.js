@@ -11,7 +11,7 @@ export async function getGoogleCloudZones() {
     }
     let [zones, _] = await compute.getZones();
     let parsedZones = zones.map(zone => zone.name);
-    cacheSet('cache:locations:gcp', JSON.stringify(parsedZones), 'EX', 60 * 30);
+    cacheSet('cache:locations:gcp', JSON.stringify(parsedZones), 'EX', 60 * 60 * 48);
     return parsedZones;
 }
 

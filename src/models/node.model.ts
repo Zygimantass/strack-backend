@@ -28,6 +28,10 @@ const schema = new Schema({
     name: Schema.Types.String,
     location: Schema.Types.String,
     owner_id: Schema.Types.String,
+    graphana_username: Schema.Types.String,
+    graphana_password: Schema.Types.String,
+    agent_name: Schema.Types.String,
+    agent_password: Schema.Types.String,
     type: {
         type: Schema.Types.Number,
         enum: NodeType
