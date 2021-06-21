@@ -1,3 +1,2 @@
 # Strack backend
-## Running
-```docker-compose up -d```
+Backend for the strack project
